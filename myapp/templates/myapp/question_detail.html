@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ question.title }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-3">{{ question.title }}</h1>
+<p>{{ question.content|linebreaksbr }}</p>
+<hr>
+
+<h2 class="mt-4">Answer List</h2>
+<ul class="list-group mb-4">
+    {% for answer in answers %}
+    <li class="list-group-item">
+        {{ answer.content|linebreaksbr }}<br>
+        <small class="text-muted">{{ answer.created_at }}</small>
+    </li>
+    {% empty %}
+    <li class="list-group-item text-center text-muted">No response yet. </li>
+    {% endfor %}
+</ul>
+
+<h2 class="mt-4">Post Answer</h2>
+<form method="post" class="mb-4">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="mb-3">
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+        <div class="text-danger small">{{ field.errors }}</div>
+        {% endif %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Post</button>
+</form>
+
+<a href="{% url 'myapp:question_list' %}" class="btn btn-secondary">← Back to Question List</a>
+{% endblock %}
